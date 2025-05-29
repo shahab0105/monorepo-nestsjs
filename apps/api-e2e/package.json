@@ -17,8 +17,8 @@
           "passWithNoTests": true
         },
         "dependsOn": [
-          "@theysaid-backend/api:build",
-          "@theysaid-backend/api:serve"
+          "@theysaid-backend/apps/api:build",
+          "@theysaid-backend/apps/api:serve"
         ]
       }
     }

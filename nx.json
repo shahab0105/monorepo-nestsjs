@@ -32,5 +32,9 @@
         "watchDepsTargetName": "watch-deps"
       }
     }
-  ]
+  ],
+  "workspaceLayout": {
+    "appsDir": "apps",
+    "libsDir": "libs"
+  }
 }
