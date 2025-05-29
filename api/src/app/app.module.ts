@@ -3,6 +3,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { PostsModule } from './posts/posts.module';
 
 @Module({
   imports: [
@@ -16,12 +17,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       type: 'postgres',
       host: 'localhost',
       port: 5432,
-      username: 'your_db_user',
-      password: 'your_db_password',
-      database: 'your_db_name',
+      username: 'postgres',
+      password: 'postgres',
+      database: 'theysaid',
       autoLoadEntities: true,
-      synchronize: true, // Set to false in production
+      synchronize: true,
     }),
+    PostsModule
   ],
 })
 export class AppModule {}
