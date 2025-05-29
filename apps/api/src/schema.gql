@@ -10,4 +10,15 @@ type Post {
 
 type Query {
   posts: [Post!]!
+  post(id: Int!): Post!
+}
+
+type Mutation {
+  createPost(title: String!, content: String!): Post!
+  deletePost(id: Int!): Boolean!
+  updatePost(id: Float!, title: String!, content: String!): Boolean!
+}
+
+type Subscription {
+  postCreated: Post!
 }
