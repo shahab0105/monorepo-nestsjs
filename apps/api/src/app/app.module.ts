@@ -5,9 +5,13 @@ import { join } from 'path';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostsModule } from './posts/posts.module';
 import { PubSub } from 'graphql-subscriptions';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true, // makes ConfigService available globally
+    }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'apps/api/src/schema.gql'),
@@ -17,24 +21,28 @@ import { PubSub } from 'graphql-subscriptions';
       playground: true,
     }),
     // ... other modules
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'postgres',
-      database: 'theysaid',
-      autoLoadEntities: true,
-      synchronize: true,
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        type: 'postgres',
+        host: config.get<string>('DB_HOST', 'localhost'),
+        port: parseInt(config.get<string>('DB_PORT', '5432')),
+        username: config.get<string>('DB_USERNAME', 'postgres'),
+        password: config.get<string>('DB_PASSWORD', 'postgres'),
+        database: config.get<string>('DB_NAME', 'theysaid'),
+        autoLoadEntities: true,
+        synchronize: true,
+      }),
     }),
-    PostsModule
+    PostsModule,
   ],
-  providers:[
+  providers: [
     {
       provide: 'PUB_SUB',
       useValue: new PubSub(),
     },
   ],
-  exports: ['PUB_SUB']
+  exports: ['PUB_SUB'],
 })
 export class AppModule {}
