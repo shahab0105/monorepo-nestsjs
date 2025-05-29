@@ -2,7 +2,9 @@
   "name": "@theysaid-backend/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+     "prepare": "husky install"
+  },
   "private": true,
   "devDependencies": {
     "@nestjs/schematics": "^10.0.1",
@@ -16,6 +18,8 @@
     "@swc/core": "~1.5.7",
     "@swc/helpers": "~0.5.11",
     "@types/node": "~18.16.9",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.0",
     "nx": "21.1.2",
     "prettier": "^2.6.2",
     "tslib": "^2.3.0",
