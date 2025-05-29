@@ -9,7 +9,7 @@ import { PostsModule } from './posts/posts.module';
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      autoSchemaFile: join(process.cwd(), 'apps/api/src/schema.gql'),
       playground: true,
     }),
     // ... other modules
