@@ -1,23 +1,27 @@
-# Use official Node.js LTS image
-FROM node:18-alpine
+# === Stage 1: Build the NestJS app ===
+FROM node:18-alpine AS builder
 
-# Set working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json
+COPY package*.json ./
+COPY tsconfig.base.json ./
+COPY nx.json ./
+COPY apps ./apps
+COPY libs ./libs
+
+RUN npm install
+
+# Build the NestJS app using Nx CLI
+RUN npx nx build api
+
+# === Stage 2: Run the built app ===
+FROM node:18-alpine
+
+WORKDIR /app
+
+COPY --from=builder /app/apps/api/dist ./dist
 COPY package*.json ./
 
-# Install dependencies with npm
-RUN npm install --production
+RUN npm install --omit=dev
 
-# Copy the rest of the application
-COPY . .
-
-# Build the NestJS app (adjust path if needed)
-RUN npm run build
-
-# Expose the port your app runs on
-EXPOSE 3000
-
-# Start the application
-CMD ["node", "dist/apps/api/main"]
+CMD ["node", "dist/main.js"]

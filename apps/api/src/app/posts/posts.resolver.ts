@@ -45,7 +45,7 @@ export class PostsResolver {
 
   @Subscription(() => Post)
   postCreated() {
-    return this.pubSub.asyncIterator('postCreated');
+    return (this.pubSub as any).asyncIterator('postCreated');
   }
 
   @Mutation(() => Boolean)

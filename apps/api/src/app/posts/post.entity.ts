@@ -6,13 +6,13 @@ import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 export class Post {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Field()
   @Column()
-  title: string;
+  title!: string;
 
   @Field()
   @Column()
-  content: string;
+  content!: string;
 }
