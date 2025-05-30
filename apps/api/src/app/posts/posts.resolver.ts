@@ -28,6 +28,11 @@ export class PostsResolver {
     return this.postsService.findOne(id);
   }
 
+  @Query(() => String)
+  triggerError(): string {
+    throw new Error('This is a simulated error for demonstration.');
+  }
+
   @Mutation(() => Post)
   async createPost(
     @Args('title') title: string,
