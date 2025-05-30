@@ -1,22 +1,23 @@
-# Dockerfile
-FROM node:20-alpine
+# Use official Node.js LTS image
+FROM node:18-alpine
 
-# Create app directory
-WORKDIR /usr/src/app
+# Set working directory
+WORKDIR /app
 
-# Install dependencies
+# Copy package.json and package-lock.json
 COPY package*.json ./
-COPY pnpm-lock.yaml ./
-RUN npm install -g pnpm && pnpm install
 
-# Copy source code
+# Install dependencies with npm
+RUN npm install --production
+
+# Copy the rest of the application
 COPY . .
 
-# Build the app (optional, if using a compiled language like TS)
-RUN pnpm build
+# Build the NestJS app (adjust path if needed)
+RUN npm run build
 
-# Expose API port
+# Expose the port your app runs on
 EXPOSE 3000
 
-# Run the app
-CMD ["pnpm", "start"]
+# Start the application
+CMD ["node", "dist/apps/api/main"]
