@@ -53,7 +53,7 @@ npx nx serve api
 4. Access GraphQL playground at:
 
 ```
-http://localhost:3333/graphql
+http://localhost:3000/graphql
 ```
 
 ---
