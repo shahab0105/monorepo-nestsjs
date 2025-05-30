@@ -5,9 +5,9 @@ import {
   HttpException,
   Logger,
 } from '@nestjs/common';
-import { GqlArgumentsHost } from '@nestjs/graphql';
+// import { GqlArgumentsHost } from '@nestjs/graphql';
 import { ApolloError } from 'apollo-server-core';
-import { ContextType } from '@nestjs/common/interfaces';
+// import { ContextType } from '@nestjs/common/interfaces';
 
 @Catch()
 export class GraphQLExceptionFilter implements ExceptionFilter {
@@ -21,7 +21,7 @@ export class GraphQLExceptionFilter implements ExceptionFilter {
       throw exception;
     }
 
-    const gqlHost = GqlArgumentsHost.create(host);
+    // const gqlHost = GqlArgumentsHost.create(host);
 
     this.logger.error('GraphQL Exception:', exception);
 
