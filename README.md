@@ -1,90 +1,171 @@
-# TheysaidBackend
+# TheySaid Backend (GraphQL + NestJS + Nx)
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+This project is a simple blog backend built with NestJS using GraphQL and TypeORM, managed in an Nx monorepo. It supports full CRUD operations and real-time subscriptions for blog posts.
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is almost ready ✨.
+---
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/nx-api/js?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+## 🚀 Features
 
-## Finish your CI setup
+- ✅ CRUD operations for blog posts
+- ✅ GraphQL API using `@nestjs/graphql` (code-first)
+- ✅ Real-time subscriptions via `graphql-subscriptions`
+- ✅ PostgreSQL integration via TypeORM
+- ✅ Nx monorepo structure
+- ✅ Centralized logging and error handling
+- ✅ Docker support for containerized development
+- ✅ Sample queries and mutations
 
-[Click here to finish setting up your workspace!](https://cloud.nx.app/connect/FeLk6rkF4z)
+---
 
+## 📁 Folder Structure
 
-## Generate a library
+- `apps/api`: The main NestJS application
+- `libs/`: Reserved for shared code if needed later
 
-```sh
-npx nx g @nx/js:lib packages/pkg1 --publishable --importPath=@my-org/pkg1
+---
+
+## 🛠️ Setup Instructions
+
+### ✅ Without Docker
+
+1. Install dependencies:
+
+```bash
+npm install
 ```
 
-## Run tasks
-
-To build the library use:
-
-```sh
-npx nx build pkg1
-```
-
-To run any task with Nx use:
-
-```sh
-npx nx <target> <project-name>
-```
-
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
-
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Versioning and releasing
-
-To version and release the library use
+2. Set up a PostgreSQL database and update `.env`:
 
 ```
-npx nx release
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=postgres
+DB_PASSWORD=postgres
+DB_DATABASE=theysaid
 ```
 
-Pass `--dry-run` to see what would happen without actually releasing the library.
+3. Run the app:
 
-[Learn more about Nx release &raquo;](hhttps://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Keep TypeScript project references up to date
-
-Nx automatically updates TypeScript [project references](https://www.typescriptlang.org/docs/handbook/project-references.html) in `tsconfig.json` files to ensure they remain accurate based on your project dependencies (`import` or `require` statements). This sync is automatically done when running tasks such as `build` or `typecheck`, which require updated references to function correctly.
-
-To manually trigger the process to sync the project graph dependencies information to the TypeScript project references, run the following command:
-
-```sh
-npx nx sync
+```bash
+npx nx serve api
 ```
 
-You can enforce that the TypeScript project references are always in the correct state when running in CI by adding a step to your CI job configuration that runs the following command:
+4. Access GraphQL playground at:
 
-```sh
-npx nx sync:check
+```
+http://localhost:3333/graphql
 ```
 
-[Learn more about nx sync](https://nx.dev/reference/nx-commands#sync)
+---
+
+### ✅ With Docker
+
+1. Make sure Docker is installed and running.
+2. Run the stack:
+
+```bash
+docker-compose up --build
+```
+
+This starts both the NestJS API and a PostgreSQL container.
+
+---
+
+## 🧪 Sample GraphQL Queries
+
+### ✅ Create a Post
+
+```graphql
+mutation {
+  createPost(title: "Test Post", content: "This is a test.") {
+    id
+    title
+    content
+  }
+}
+```
+
+### ✅ Get All Posts
+
+```graphql
+query {
+  posts {
+    id
+    title
+    content
+  }
+}
+```
+
+### ✅ Subscription (new post)
+
+```graphql
+subscription {
+  postCreated {
+    id
+    title
+    content
+  }
+}
+```
+
+### 🧨 Trigger Error
+
+Use this to simulate a GraphQL error for demo purposes:
+
+```graphql
+query {
+  errorTrigger
+}
+```
+
+---
+
+## 🧰 Technical Details
+
+### ✅ Logging
+
+Logging is handled using `Logger` from `@nestjs/common` and is applied across the app globally.
+
+### ✅ Error Handling
+
+A global `GraphQLExceptionFilter` ensures consistent GraphQL errors using `ApolloError`, `UserInputError`, and proper exception transformation.
+
+### ✅ Dataloader
+
+Dataloader is not implemented in this version because the app only uses a single entity (`Post`), so there’s no N+1 problem.
+
+---
+
+## 🐳 Docker Notes
+
+- `Dockerfile`: Used to build the app image.
+- `docker-compose.yml`: Used to run both the API and the database.
+
+---
+
+## 📌 Known Limitations
+
+- **Nx and NestJS** integration via `@nx/nest` has unresolved issues:
+  👉 https://github.com/nrwl/nx/issues/30188
+
+- Also noticed that the `@nx/nest` generator didn't place the app in `/apps/`, which is recommended:
+  👉 https://nx.dev/concepts/decisions/folder-structure
+
+---
+
+## 🧪 Testing
+
+Use the included `seed.ts` script to populate sample data:
+
+```bash
+npx ts-node apps/api/scripts/seed.ts
+```
+
+---
 
 
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
 
-## Install Nx Console
+## 🙌 Author github.com/shahab0105
 
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
-
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Useful links
-
-Learn more:
-
-- [Learn more about this workspace setup](https://nx.dev/nx-api/js?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+Built with ❤️ using NestJS + Nx.
